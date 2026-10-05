@@ -1,6 +1,6 @@
 
     public class Main {
-
+//teste
     public static void main(String[] args) {
 
         // SENHA APENAS PARA TESTAR O QUEBRADOR.
