@@ -7,7 +7,7 @@
         //
         // Depois isso será removido quando vocês
         // fizerem a integração.
-        String senhaTeste = "keityf";
+        String senhaTeste = "223654";
 
 
         // Cria o quebrador.
