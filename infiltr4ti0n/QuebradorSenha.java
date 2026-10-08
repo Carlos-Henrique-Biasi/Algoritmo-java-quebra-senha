@@ -7,13 +7,13 @@ public class QuebradorSenha {
             "0123456789";
 
     // Tamanho máximo permitido no projeto.
-    private static final int TAMANHO_MAXIMO = 6;
+    private static final int tamanhoMaximo = 6;
 
     // Conta quantas tentativas foram feitas.
     private long tentativas;
 
     // Esse método inicia o processo de força bruta.
-    public String quebrar(String senhaTeste) {
+    public String quebrar(String url, String usuario) {
 
         // Zera o contador sempre que começar uma nova execução.
         tentativas = 0;
@@ -21,9 +21,8 @@ public class QuebradorSenha {
         // Começa tentando senhas de tamanho 1.
         // Depois tamanho 2, 3, 4...
         // Até chegar em 6.
-        for (int tamanho = 1; tamanho <= TAMANHO_MAXIMO; tamanho++) {
+        for (int tamanho = 1; tamanho <= tamanhoMaximo; tamanho++) {
             // Cria um array de caracteres do tamanho atual.
-            //
             // Exemplo:
             // tamanho = 3
             //
@@ -33,7 +32,7 @@ public class QuebradorSenha {
 
             // Começa a gerar as combinações.
             String resultado =
-                    gerarCombinacoes(tentativa, 0, senhaTeste);
+                    gerarCombinacoes(tentativa, 0, url, usuario);
 
             // Se encontrou a senha,
             // devolve ela e encerra o processo.
@@ -43,7 +42,6 @@ public class QuebradorSenha {
             }
         }
 
-
         // Se não encontrou nenhuma combinação até 6 caracteres.
         return null;
     }
@@ -52,7 +50,8 @@ public class QuebradorSenha {
     private String gerarCombinacoes(
             char[] tentativa,
             int posicao,
-            String senhaTeste) {
+            String url,
+            String usuario) {
 
         // Se chegamos ao final do array,
         // significa que uma combinação inteira foi formada.
@@ -64,7 +63,11 @@ public class QuebradorSenha {
             String candidata = new String(tentativa);
 
             // Verifica se acertou.
-            if (candidata.equals(senhaTeste)) {
+            // Aqui iremos jogar a senha para rota de API e verificar se o resultado voltou Positivo.
+
+            int resposta = ApiNodeJS.enviarDadosParaApi(url, usuario, candidata);
+
+            if (resposta == 1) {
 
                 return candidata;
             }
@@ -83,11 +86,14 @@ public class QuebradorSenha {
                     gerarCombinacoes(
                             tentativa,
                             posicao + 1,
-                            senhaTeste
+                            url,
+                            usuario
                     );
 
             // Se encontrou a senha em alguma tentativa,
             // devolve o resultado.
+            // Aqui iremos jogar a senha para rota de API e verificar se o resultado voltou Positivo.
+
             if (resultado != null) {
 
                 return resultado;

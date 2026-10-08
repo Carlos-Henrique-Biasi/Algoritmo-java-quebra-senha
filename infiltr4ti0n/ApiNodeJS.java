@@ -21,13 +21,24 @@ public class ApiNodeJS {
 
             // Retorna uma mensagem baseada na resposta da sua API
             if (response.statusCode() == 200) {
+                System.out.println("[API] 200 - Senha correta!");
                 return 1; // Deu certo
-            } else {
+
+            } else if(response.statusCode() == 401) {
                 return 2; //Deu errado
+
+            } else{
+                System.out.println("[API] Erro HTTP: " + response.statusCode());
+                System.out.println("[API] Resposta: " + response.body());
+                return 3;
             }
 
         } catch (Exception e) {
-            return 3; //"Erro de conexão: Verifique se o servidor Node.js está ligado."
+            System.out.println("[API] ERRO DE CONEXÃO!");
+            System.out.println("[API] Verifique se o servidor Node.js está ligado.");
+            e.printStackTrace();
+            return 4; //"Erro de conexão: Verifique se o servidor Node.js está ligado."
+            
         }
     }
 }

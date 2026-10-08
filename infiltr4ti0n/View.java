@@ -104,20 +104,52 @@ public class View extends JFrame {
         add(lblStatusSenha);
 
         // Ação do Botão
-        btnBotao.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String usuarioDigitado = txtUsuario.getText();
-                String senhaVindaDeOutroLugar = buscarSenhaDeOutroLugar();
+       btnBotao.addActionListener(new ActionListener() {
 
-                lblStatusUsuario.setText("Usuário: " + usuarioDigitado);
-                lblStatusSenha.setText("senha: " + senhaVindaDeOutroLugar);
-            }
-        });
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            String urlDigitada = txtUrl.getText();
+            String usuarioDigitado = txtUsuario.getText();
+
+            lblStatusUsuario.setText("Usuário: " + usuarioDigitado);
+            lblStatusSenha.setText("senha: Quebrando...");
+
+            btnBotao.setEnabled(false);
+
+            SwingWorker<String, Void> worker = new SwingWorker<>() {
+
+                @Override
+                protected String doInBackground() {
+                    return Main.executarQuebra(
+                            urlDigitada,
+                            usuarioDigitado
+                    );
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        String senhaEncontrada = get();
+
+                        if (senhaEncontrada != null) {
+                            lblStatusSenha.setText("senha: " + senhaEncontrada);
+                        } else {
+                            lblStatusSenha.setText("senha: Não encontrada");
+                        }
+
+                    } catch (Exception erro) {
+                        lblStatusSenha.setText("senha: Erro");
+                        erro.printStackTrace();
+                    }
+
+                    btnBotao.setEnabled(true);
+                }
+        };
+
+        worker.execute();
     }
-
-    private String buscarSenhaDeOutroLugar() {
-        return "123456"; 
+});
     }
 
     // Classe auxiliar para criar bordas arredondadas e finas
@@ -150,11 +182,5 @@ public class View extends JFrame {
             insets.top = insets.bottom = 4;
             return insets;
         }
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new View().setVisible(true);
-        });
     }
 }
