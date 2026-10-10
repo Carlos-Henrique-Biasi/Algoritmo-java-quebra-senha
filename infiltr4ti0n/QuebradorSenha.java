@@ -59,10 +59,10 @@ public class QuebradorSenha {
             // Conta mais uma tentativa.
             tentativas++;
 
-            if (tentativas % 10000 == 0) {
+            if (tentativas % 1000 == 0) {
                 System.out.println("Tentativas realizadas: " + tentativas);
             }
-            
+
             // Transforma o array de char em String.
             String candidata = new String(tentativa);
 
